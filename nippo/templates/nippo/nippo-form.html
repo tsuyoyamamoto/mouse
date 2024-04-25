@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-3" style="max-width:700px;">
+    
+    <div class="text-center my-3">
+    {% if object %}
+        <h2>{{ object }}の編集</h2>
+    {% else %}
+        <h2>新しく日報を作成</h2>
+    {% endif %}
+    </div>
+    
+    <form method="POST"> {% csrf_token %}
+    <!--8-6カレンダー表記これによりjqueryとform.mediaを読み込み、「datepicker-plus」が表示できるようになります-->
+    {% bootstrap_javascript jquery='full' %} 
+    {{ form.media }}  
+    {{ form.as_p }}
+    {% if object %}
+        <button class="btn btn-primary form-control" type="submit">保存</button>
+        <p class="my-3 text-danger" viewBox="0 0 16 16" data-bs-toggle="modal" data-bs-target="#deleteModal-{{object.slug}}" style="cursor:pointer;display:inline-block;font-weight:700; font-size:12px;">
+            <u>日報を削除する</u>
+        </p>
+    {% else %}
+        <button class="btn btn-primary form-control" type="submit">登録</button>
+    {% endif %}      
+    </form>
+    {% if object %}
+        {% include 'nippo/nippo-delete.html' %}
+    {% endif %}
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,59 @@
+<!--8-7フィルターの表示-->
+
+{% extends "base.html" %}
+{% block head_title %}日報アプリ一覧{% endblock %}
+
+{% block content %}
+  <div class="container d-flex justify-content-center flex-wrap-reverse py-3">
+    <div class="flex-grow-1"><!-- 一覧リストdi-->
+        {% if filter.qs %}
+            {% for obj in filter.qs %}
+                <div class="card mx-auto mb-2" style="max-width:700px; min-width:300px;">
+                    <div class="card-header">
+                        {{ obj.date|date:"Y年n年j日" }}
+                        {% if not obj.public %}
+                            <span class="badge bg-secondary">下書き</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                        {% if obj.user == request.user %} 
+                            <span class="float-end text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{obj.slug}}">
+                                <i class="bi bi-trash-fill"></i>
+                            </span>
+                                <a href={% url "nippo-update" obj.slug %}>
+                        {% else %}
+                            <a href={% url 'nippo-detail' obj.slug %}>
+                        {% endif %}
+                                {{ obj.title }}
+                            </a>
+                        </h5>
+                        <p class="card-text">
+                            {{ obj.content }}
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        by 
+                        {% if obj.user == request.user %}
+                            <span class="badge bg-primary">あなた</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ obj.user.profile.username }}</span>
+                        {% endif %} 
+                    </div>
+                </div>
+                {% include "nippo/nippo-delete.html" with object=obj %}
+            {% endfor %}
+        {% else %}
+            <div>表示する日報がありません。</div>
+        {% endif %}
+    </div><!-- 一覧リストdiv終了-->
+    <!-- 右側を表示する -->
+    {% include 'nippo/nippo-filter.html' %}
+  </div>
+{% endblock %}
+
+
+
+
+
+

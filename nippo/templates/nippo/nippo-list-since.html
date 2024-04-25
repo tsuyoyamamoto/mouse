@@ -1,0 +1,52 @@
+
+{% extends "base.html" %}<!--ベーステンプレートからloadする-->
+{% block head_title %}日報アプリ一覧{% endblock %}
+{% block content %}
+<div class="container">
+    {% if request.user.is_authenticated %}
+        <div class="mt-3 d-flex justify-content-end">
+            <a href={% url "nippo-create" %} class="btn btn-outline-primary float-end">
+              <i class="bi bi-plus"></i>
+            </a>
+            <!--ボタン btn btn-outline-primaryアウトラインボタンを表示します。-->
+        </div>
+    {% endif %}
+    {% if object_list %}
+        {% for obj in object_list %}
+            <div class="card my-3"><!--my-3はカードの間隔-->
+              <div class="card-header"><!--8-1-->
+                {{ obj.date|date:"Y年n年j日" }}<!--8-6訂正-->
+              </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                      {% if obj.user == request.user %} 
+                      <span class="float-end text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{obj.slug}}">
+                          <i class="bi bi-trash-fill"></i>
+                      </span>
+                        <a href={% url 'nippo-update' obj.slug %}>
+                      {% else %}
+                        <a href={% url 'nippo-detail' obj.slug %}>
+                      {% endif %}
+                            {{ obj.title }}
+                        </a>
+                    </h5>
+                    <p class="card-text">
+                        {{ obj.content }}
+                    </p>
+                </div>
+                <div class="card-footer">
+                by 
+                {% if obj.user == request.user %}
+                    <span class="badge bg-primary">あなた</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ obj.user.profile.username }}</span>
+                {% endif %} 
+                </div>
+            </div>
+            {% include "nippo/nippo-delete.html" with object=obj %}
+        {% endfor %}
+      {% else %}
+        <div>日報が見つかりません</div>
+      {% endif %}
+</div>
+{% endblock %}

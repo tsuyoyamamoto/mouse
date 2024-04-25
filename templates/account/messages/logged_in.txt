@@ -1,0 +1,11 @@
+{% load account %}
+{% load i18n %}
+{% user_display user as name %}
+{% blocktrans %}Successfully signed in as {{name}}.  
+コメント:    １templates > account > messages > logged_in.txtでファイルを上書きしてメッセージを作成 
+   ２{load account} と記述してから{ user_display user} とすることでログインしているユーザーを表示できる 
+　　３{load タグ名}で読み込み　accountタグはアカウント全般を扱うためのタグ
+ {% endblocktrans %}
+
+
+

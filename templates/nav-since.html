@@ -1,0 +1,39 @@
+{% load accounts_user %}<!--7-5 templateタグの自作　load タグで読み込み　load ファイル名で読み込まれる-->
+<nav class="navbar navbar-dark bg-primary">4-1navバーはbodyタグの一番上に保存
+
+    <div class="container-fluid">
+   
+      <div>
+        <a class="navbar-brand" href={% url "nippo-list" %}>
+        
+            <i class="bi bi-bootstrap-fill" style="font-size: 2rem;"></i>bootstrapアイコン
+            <img src="/media/pages/111.png" style="width:50px;"/>4-5画像を表示する方法
+        </a>
+      </div>
+      <div class="flex-grow-1" style="max-width:500px;">
+        <form class="d-flex" method="GET">
+          <input class="form-control me-2" type="search" placeholder="検索..." aria-label="Search" name="search">
+          <button class="btn btn-outline-light" type="submit">search</button>
+        </form>
+      </div>
+      <div class="text-light nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ request.user|user_display}}
+            <!--7-5 request.userでAnonimouseuser とログインユーザーで区別ができる-->
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <!--7-6 ログイン判定機能の実装-->
+            {% if request.user.is_authenticated %}
+                <li><a class="dropdown-item" href="#">アカウント設定</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href={% url "account_logout" %}>ログアウト</a></li>
+            {% else %}
+                <li><a class="dropdown-item" href={% url "account_login" %}>ログイン</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href={% url "account_signup" %}>サインアップ</a></li>
+            {% endif %}
+          </ul>
+      </div>
+    </div>
+  </nav>
+
